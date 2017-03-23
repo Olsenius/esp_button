@@ -69,10 +69,15 @@ void loop() {
             client.println("Content-Type: text/html");
             client.println("Connection: close");
             client.println();
-            // your actual web page that displays temperature and humidity
             client.println("<!DOCTYPE HTML>");
             client.println("<html>");
             client.println("<head></head><body><h1>ESP buttons</h1>");
+            client.print("Awesome - ");
+            client.println(awesomeCounter);
+            client.print("Ok - ");
+            client.println(okCounter);
+            client.print("Bad - ");
+            client.println(badCounter);
             client.println("</body></html>");     
             break;
         }
