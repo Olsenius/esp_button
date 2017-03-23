@@ -7,26 +7,22 @@
 const char ssid[] = WIFI_SSID;
 const char password[] = WIFI_PASSWORD;
 
-const int awesomeButtonPin = 1;
-const int okButtonPin = 2;
-const int badButtonPin = 3;
+const int awesomePin = D5;
+const int okPin = D6;
+const int badPin = D7;
 
-int awesomeState = 0;
-int okState = 0;
-int badState = 0;
-
-int awesomeCounter = 0;
-int okCounter =0;
-int badCounter = 0;
+int awesomeState, okState, badState = 0;
+int lastAwesomeState, lastOkState, lastBadState = 0;
+int awesomeCounter, okCounter, badCounter = 0;
 
 // Web Server on port 80
 WiFiServer server(80);
 
 // only runs once on boot
 void setup() {
-  pinMode(awesomeButtonPin, INPUT);
-  pinMode(okButtonPin, INPUT);
-  pinMode(badButtonPin, INPUT);
+  pinMode(awesomePin, INPUT);
+  pinMode(okPin, INPUT);
+  pinMode(badPin, INPUT);
   
   // Initializing serial port for debugging purposes
   Serial.begin(115200);
@@ -95,23 +91,27 @@ void loop() {
     client.stop();
     Serial.println("Client disconnected.");
   } else {
-    awesomeState = digitalRead(awesomeButtonPin);
-    okState = digitalRead(okButtonPin);
-    badState = digitalRead(badButtonPin);
-    if (awesomeState = HIGH){
-      awesomeCounter += 1;
+    awesomeState = digitalRead(awesomePin);
+    if (awesomeState != lastAwesomeState && awesomeState == HIGH) {
       Serial.println("Awesome");
-      delay(100);
+      awesomeCounter++; 
     }
-    if (okState = HIGH){
-      okCounter += 1;
-      Serial.println("Ok");
-      delay(100);
+    lastAwesomeState = awesomeState;    
+    
+    okState = digitalRead(okPin);
+    if (okState != lastOkState && okState == HIGH) {
+      Serial.println("OK");
+      okCounter++; 
     }
-    if (badState = HIGH){
-      badCounter += 1;
+    lastOkState = okState;    
+
+    badState = digitalRead(badPin);
+    if (badState != lastBadState && badState == HIGH) {
       Serial.println("Bad");
-      delay(100);
+      badCounter++; 
     }
+    lastBadState = badState;    
+    
+    delay(50);
   }
 }   
